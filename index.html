@@ -2,47 +2,24 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>点击计分游戏</title>
-
-    <style>
-        body {
-            text-align: center;
-            margin-top: 120px;
-            font-family: Arial;
-        }
-
-        #score {
-            font-size: 60px;
-            margin: 20px;
-        }
-
-        button {
-            font-size: 20px;
-            margin: 10px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        #status {
-            margin-top: 20px;
-            font-size: 18px;
-            color: gray;
-        }
-    </style>
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>点击计分游戏</h1>
+    <div class="container">
+        <h1>Todo List</h1>
 
-    <div id="score">0</div>
+        <div class="input-area">
+            <input id="taskInput" type="text" placeholder="输入任务...">
+            <button onclick="addTask()">添加</button>
+        </div>
 
-    <button onclick="add()">+1</button>
-    <button onclick="minus()">-1</button>
+        <ul id="taskList"></ul>
+    </div>
 
-    <div id="status">开始游戏</div>
-
-   <script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
