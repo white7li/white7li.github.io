@@ -1,25 +1,244 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>Todo List</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人技术博客</title>
+
+<style>
+:root{
+    --bg:#0f1115;
+    --panel:#151923;
+    --card:#1b2130;
+    --text:#e6e6e6;
+    --muted:#9aa4b2;
+    --accent:#4f8cff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei";
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* 左侧导航 */
+.sidebar{
+    width:260px;
+    background:var(--panel);
+    padding:20px;
+    border-right:1px solid #222838;
+}
+
+.logo{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:20px;
+    color:var(--accent);
+}
+
+.nav-item{
+    padding:10px 12px;
+    margin:6px 0;
+    border-radius:8px;
+    cursor:pointer;
+    color:var(--muted);
+    transition:0.2s;
+}
+
+.nav-item:hover{
+    background:#20283a;
+    color:white;
+}
+
+.nav-item.active{
+    background:var(--accent);
+    color:white;
+}
+
+/* 内容区 */
+.main{
+    flex:1;
+    padding:30px;
+    overflow:auto;
+}
+
+.header{
+    font-size:22px;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:16px;
+}
+
+.card{
+    background:var(--card);
+    padding:16px;
+    border-radius:12px;
+    border:1px solid #232a3a;
+    transition:0.2s;
+    cursor:pointer;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    border-color:var(--accent);
+}
+
+.card h3{
+    font-size:16px;
+    margin-bottom:8px;
+}
+
+.card p{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.tag{
+    display:inline-block;
+    font-size:12px;
+    color:var(--accent);
+    margin-top:10px;
+}
+
+.article{
+    background:var(--card);
+    padding:20px;
+    border-radius:12px;
+    line-height:1.7;
+}
+
+.back{
+    margin-bottom:15px;
+    color:var(--accent);
+    cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>Todo List</h1>
+<div class="sidebar">
+    <div class="logo">⚙ 技术笔记</div>
+    <div id="nav"></div>
+</div>
 
-        <div class="input-area">
-            <input id="taskInput" type="text" placeholder="输入任务...">
-            <button onclick="addTask()">添加</button>
+<div class="main">
+    <div class="header" id="title">选择一个学科</div>
+    <div id="content"></div>
+</div>
+
+<script>
+// ================= 数据 =================
+const data = {
+    "C语言":[
+        {title:"指针基础",desc:"理解指针与内存模型",content:"C语言指针是核心概念，本质是内存地址操作..."},
+        {title:"结构体",desc:"组织复杂数据结构",content:"struct用于组合不同类型变量..."}
+    ],
+    "Python":[
+        {title:"基础语法",desc:"变量、循环、函数",content:"Python语法简洁，适合快速开发..."},
+        {title:"爬虫入门",desc:"requests + bs4",content:"通过HTTP请求获取网页数据..."}
+    ],
+    "单片机":[
+        {title:"GPIO控制",desc:"控制IO输出输入",content:"单片机通过寄存器控制GPIO..."}
+    ],
+    "数电":[
+        {title:"逻辑门",desc:"AND OR NOT",content:"数字电路基础是逻辑门..."}
+    ],
+    "模电":[
+        {title:"三极管",desc:"放大与开关",content:"三极管工作在放大区与开关区..."}
+    ],
+    "计算机网络基础":[
+        {title:"TCP/IP模型",desc:"分层结构",content:"网络通信基于分层模型..."}
+    ]
+};
+
+// ================= 渲染导航 =================
+const nav = document.getElementById("nav");
+const content = document.getElementById("content");
+const title = document.getElementById("title");
+
+let current = null;
+
+function renderNav(){
+    Object.keys(data).forEach((k,idx)=>{
+        const div = document.createElement("div");
+        div.className = "nav-item";
+        div.innerText = k;
+
+        div.onclick = ()=>{
+            document.querySelectorAll(".nav-item").forEach(e=>e.classList.remove("active"));
+            div.classList.add("active");
+            current = k;
+            renderList(k);
+        };
+
+        if(idx===0){
+            setTimeout(()=>div.click(),10);
+        }
+
+        nav.appendChild(div);
+    });
+}
+
+// ================= 渲染文章列表 =================
+function renderList(key){
+    title.innerText = key;
+    content.innerHTML = "";
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    data[key].forEach((item)=>{
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>${item.title}</h3>
+            <p>${item.desc}</p>
+            <div class="tag">点击阅读</div>
+        `;
+
+        card.onclick = ()=>renderArticle(item,key);
+
+        grid.appendChild(card);
+    });
+
+    content.appendChild(grid);
+}
+
+// ================= 渲染文章 =================
+function renderArticle(item,key){
+    content.innerHTML = `
+        <div class="back">← 返回 ${key}</div>
+        <div class="article">
+            <h2>${item.title}</h2>
+            <p style="color:#9aa4b2;margin:10px 0">${item.desc}</p>
+            <div>${item.content}</div>
         </div>
+    `;
 
-        <ul id="taskList"></ul>
-    </div>
+    document.querySelector(".back").onclick=()=>{
+        renderList(key);
+    };
+}
 
-    <script src="script.js"></script>
+renderNav();
+</script>
 
 </body>
 </html>
