@@ -1,18 +1,78 @@
-<h1 id="count">0</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>点击计分游戏</title>
 
-<button onclick="add()">+1</button>
-<button onclick="minus()">-1</button>
+    <style>
+        body {
+            text-align: center;
+            margin-top: 120px;
+            font-family: Arial;
+        }
 
-<script>
-    let num = 0;
+        #score {
+            font-size: 60px;
+            margin: 20px;
+        }
 
-    function add() {
-        num++;
-        document.getElementById("count").innerText = num;
-    }
+        button {
+            font-size: 20px;
+            margin: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
 
-    function minus() {
-        num--;
-        document.getElementById("count").innerText = num;
-    }
-</script>
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>点击计分游戏</h1>
+
+    <div id="score">0</div>
+
+    <button onclick="add()">+1</button>
+    <button onclick="minus()">-1</button>
+
+    <div id="status">开始游戏</div>
+
+    <script>
+        let score = 0;
+
+        function update() {
+            document.getElementById("score").innerText = score;
+
+            let status = "";
+
+            if (score >= 10) {
+                status = "🔥 很强";
+            } else if (score >= 5) {
+                status = "🙂 不错";
+            } else if (score >= 0) {
+                status = "🙂 继续加油";
+            } else {
+                status = "💀 负分了";
+            }
+
+            document.getElementById("status").innerText = status;
+        }
+
+        function add() {
+            score++;
+            update();
+        }
+
+        function minus() {
+            score--;
+            update();
+        }
+    </script>
+
+</body>
+</html>
