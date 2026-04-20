@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>My Site</title>
-</head>
+<h1 id="count">0</h1>
 
-<body style="text-align:center; margin-top:100px; font-family:Arial;">
+<button onclick="add()">+1</button>
+<button onclick="minus()">-1</button>
 
-    <h1 id="title">这是我的网站</h1>
+<script>
+    let num = 0;
 
-    <p id="text">点击按钮试试</p>
+    function add() {
+        num++;
+        document.getElementById("count").innerText = num;
+    }
 
-    <button onclick="changeText()">点我</button>
-
-    <script>
-        function changeText() {
-            document.getElementById("text").innerText = "你刚刚触发了 JavaScript";
-            document.getElementById("title").innerText = "页面已被修改";
-        }
-    </script>
-
-</body>
-</html>
+    function minus() {
+        num--;
+        document.getElementById("count").innerText = num;
+    }
+</script>
