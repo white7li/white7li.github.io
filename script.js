@@ -1,20 +1,39 @@
-function addTask() {
-    console.log("按钮点击成功");
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    let input = document.getElementById("taskInput");
-    console.log("输入值：", input.value);
+const taskList = document.getElementById("taskList");
 
-    let list = document.getElementById("taskList");
+function render() {
+    taskList.innerHTML = "";
 
-    if (!input.value.trim()) {
-        console.log("空输入");
-        return;
-    }
+    tasks.forEach((task, index) => {
+        let li = document.createElement("li");
 
-    let li = document.createElement("li");
-    li.innerText = input.value;
+        li.innerHTML = `
+            <span>${task}</span>
+            <span class="delete" onclick="deleteTask(${index})">删除</span>
+        `;
 
-    list.appendChild(li);
+        taskList.appendChild(li);
+    });
 
-    input.value = "";
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+function addTask() {
+    let input = document.getElementById("taskInput");
+    let value = input.value.trim();
+
+    if (value === "") return;
+
+    tasks.push(value);
+    input.value = "";
+
+    render();
+}
+
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    render();
+}
+
+render();
