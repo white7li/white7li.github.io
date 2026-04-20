@@ -1,39 +1,20 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-const taskList = document.getElementById("taskList");
-
-function render() {
-    taskList.innerHTML = "";
-
-    tasks.forEach((task, index) => {
-        let li = document.createElement("li");
-
-        li.innerHTML = `
-            <span>${task}</span>
-            <span class="delete" onclick="deleteTask(${index})">删除</span>
-        `;
-
-        taskList.appendChild(li);
-    });
-
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
 function addTask() {
+    console.log("按钮点击成功");
+
     let input = document.getElementById("taskInput");
-    let value = input.value.trim();
+    console.log("输入值：", input.value);
 
-    if (value === "") return;
+    let list = document.getElementById("taskList");
 
-    tasks.push(value);
+    if (!input.value.trim()) {
+        console.log("空输入");
+        return;
+    }
+
+    let li = document.createElement("li");
+    li.innerText = input.value;
+
+    list.appendChild(li);
+
     input.value = "";
-
-    render();
 }
-
-function deleteTask(index) {
-    tasks.splice(index, 1);
-    render();
-}
-
-render();
