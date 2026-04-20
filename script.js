@@ -1,29 +1,39 @@
-let score = 0;
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-function update() {
-    document.getElementById("score").innerText = score;
+const taskList = document.getElementById("taskList");
 
-    let status = "";
+function render() {
+    taskList.innerHTML = "";
 
-    if (score >= 10) {
-        status = "🔥 很强";
-    } else if (score >= 5) {
-        status = "🙂 不错";
-    } else if (score >= 0) {
-        status = "🙂 继续加油";
-    } else {
-        status = "💀 负分了";
-    }
+    tasks.forEach((task, index) => {
+        let li = document.createElement("li");
 
-    document.getElementById("status").innerText = status;
+        li.innerHTML = `
+            <span>${task}</span>
+            <span class="delete" onclick="deleteTask(${index})">删除</span>
+        `;
+
+        taskList.appendChild(li);
+    });
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function add() {
-    score++;
-    update();
+function addTask() {
+    let input = document.getElementById("taskInput");
+    let value = input.value.trim();
+
+    if (value === "") return;
+
+    tasks.push(value);
+    input.value = "";
+
+    render();
 }
 
-function minus() {
-    score--;
-    update();
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    render();
 }
+
+render();
